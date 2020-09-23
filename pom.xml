@@ -17,6 +17,7 @@
         <allure-maven.version>2.9</allure-maven.version>
         <allure-maven.configuration.reportVersion>2.6.0</allure-maven.configuration.reportVersion>
         <junit-jupiter-engine.version>5.4.0</junit-jupiter-engine.version>
+        <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
     </properties>
 
     <dependencies>
@@ -81,6 +82,30 @@
                     <configuration>
                         <reportVersion>${allure-maven.configuration.reportVersion}</reportVersion>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${maven-resources-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>copy-resources</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>copy-resources</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>${allure.results.directory}</outputDirectory>
+                                <resources>
+                                    <resource>
+                                        <directory>src/test/resources</directory>
+                                        <includes>
+                                            <include>environment.properties</include>
+                                        </includes>
+                                    </resource>
+                                </resources>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
