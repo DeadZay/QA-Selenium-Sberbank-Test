@@ -3,14 +3,12 @@ package test.sberbank.qa;
 import io.qameta.allure.Step;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.concurrent.TimeUnit;
 
@@ -27,14 +25,14 @@ public class SberTest {
 
 	@Test
 	void sberTest() {
-		MarketYandexRuSubcategoryNotebookPage page =
+				MarketYandexRuSubcategoryNotebookPage page =
 				openYandexRu()
 						.clickOnMarketYandexLink()
 						.clickOnCategoryComputers()
 						.clickOnSubcategoryNotebook()
 						.setLimitOfPrice(10000, 30000)
-						.chooseManufacturer("hp")
-						.chooseManufacturer(NotebookManufacturer.lenovo)
+						.chooseManufacturer("HP")
+						.chooseManufacturer(NotebookManufacturer.Lenovo)
 						.setDisplayedItemsOnPage(displayedItemsOption)
 						.checkDisplayedItemsOnPage();
 		final String itemTitle = page.getItemTitleByIndex(1);
@@ -124,7 +122,7 @@ public class SberTest {
 		@FindBy(xpath = "//input[@type = 'text' and @name = 'Поле поиска']")
 		private WebElement manufacturerSearchInput;
 
-		@FindBy(xpath = "//div[./button = 'Показать ещё']/div[./button[@aria-expanded = 'false']]")
+		@FindBy(xpath = "//div[./button = 'Показать ещё']/div[./button[@aria-expanded = 'false']]/button")
 		private WebElement selectorOfDisplayedItems;
 
 		@FindBy(id = "header-search")
@@ -171,7 +169,7 @@ public class SberTest {
 			} catch (NoSuchElementException exception) {
 				webDriver.manage().window().setPosition(showAllManufacturersButton.getLocation());
 				showAllManufacturersButton.click();
-				exception.printStackTrace();
+				exception.addSuppressed(exception);
 			}
 			webDriver.manage().window().maximize();
 			setInputValue(manufacturerSearchInput, null);
@@ -195,23 +193,20 @@ public class SberTest {
 			try {
 				findAndChooseManufacturer(NotebookManufacturer.valueOf(manufacturer));
 			} catch (IllegalArgumentException exception) {
-				exception.printStackTrace();
+				exception.addSuppressed(exception);
 				return this;
 			}
 			return this;
 		}
 
-		final String[] DISPLAYED_ITEMS_OPTION_STRING = {
-				"Показывать по 12",
-				"Показывать по 48"
-		};
-
 		@Test
 		public MarketYandexRuSubcategoryNotebookPage setDisplayedItemsOnPage(DisplayedItemsOption option) {
 			webDriver.manage().window().maximize();
 			Actions action = new Actions(webDriver);
-			action.moveToElement(selectorOfDisplayedItems).click();
-			/*if (!selectorOfDisplayedItems.isDisplayed())
+			JavascriptExecutor executor = (JavascriptExecutor)webDriver;
+			executor.executeScript("arguments[0].click()", selectorOfDisplayedItems);
+			/*action.moveToElement(selectorOfDisplayedItems).click().build().perform();
+			*//*if (!selectorOfDisplayedItems.isDisplayed())
 				webDriver.manage().window().setPosition(selectorOfDisplayedItems.getLocation());
 			selectorOfDisplayedItems.click();*/
 			/*webDriver.findElement(By.xpath(String.format(
@@ -219,7 +214,7 @@ public class SberTest {
 					DISPLAYED_ITEMS_OPTION_STRING[option.ordinal()]))).click();*/
 			action.moveToElement(webDriver.findElement(By.xpath(String.format(
 					"//div[./button = 'Показать ещё']//div[//button[@aria-expanded]]//div[@aria-hidden = 'false']//button[.='%s']",
-					DISPLAYED_ITEMS_OPTION_STRING[option.ordinal()])))).build().perform();
+					option.toString())))).build().perform();
 			webDriver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
 			return this;
 		}
@@ -237,7 +232,7 @@ public class SberTest {
 
 		@Test
 		public String getItemTitleByIndex(int index) {
-			assert index < 0;
+			assert index >= 0;
 			return getItemByIndex(index).findElement(By.xpath(
 					("//a[../*[@data-zone-name = 'title']]")))
 					.getAttribute("title");
@@ -256,8 +251,8 @@ public class SberTest {
 
 		@Test
 		public MarketYandexRuSubcategoryNotebookPage checkIndexItemTitleEqualsText(int index, @NotNull String text) {
-			assert index < 0;
-			assert !getItemTitleByIndex(index).contains(text);
+			assert index >= 0;
+			assert getItemTitleByIndex(index).contains(text);
 			return this;
 		}
 	}
