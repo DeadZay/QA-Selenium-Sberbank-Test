@@ -140,7 +140,7 @@ public class SberTest {
 	 * Looks like simple as explicitTest(), but contains in it a lot of logic
 	 */
 	@Test
-	void implicitElementsTest() {
+	void explicitExtendedTest() {
 		open("https://yandex.ru");
 		HeaderServiceLink.market.click();
 		switchTo().window(1);

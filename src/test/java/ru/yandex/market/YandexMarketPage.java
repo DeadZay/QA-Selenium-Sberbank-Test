@@ -13,11 +13,20 @@ public class YandexMarketPage {
 
 	private static final String URL = "market.yandex.ru";
 
+	/**
+	 * A function open market.yandex.ru and return associated with that page class
+	 * @return associated with that page class
+	 */
 	public static YandexMarketPage openYandexMarketPage() {
 		open(URL);
 		return new YandexMarketPage();
 	}
 
+	/**
+	 * A function click on header catalog link "Компьютеры"
+	 * and return associated with link address class
+	 * @return associated with link address class
+	 */
 	@Test
 	public YandexMarketComputersPage clickOnComputersCatalogLink() {
 		computers.click();
