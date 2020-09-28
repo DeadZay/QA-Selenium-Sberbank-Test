@@ -166,8 +166,7 @@ public class SberTest {
 	 */
 	@Test
 	void implicitTest() {
-		YandexMarketNotebooksPage notebooksPage =
-				openYandexRuPage()
+		openYandexRuPage()
 						.clickOnMarketHeaderLink()
 						.clickOnComputersCatalogLink()
 						.clickOnNotebooksCatalogLink()
