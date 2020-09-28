@@ -2,11 +2,14 @@ package ru.yandex;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import org.junit.platform.commons.logging.LoggerFactory;
 import org.openqa.selenium.By;
 import qa.SberTest;
 import qa.selenide.interfaces.*;
 
-import java.time.Duration;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.url;
@@ -66,7 +69,7 @@ public enum HeaderServiceLink implements Clickable, SelenideElementGetter, Xpath
 				Condition.exist, Condition.enabled, Condition.visible))
 				.click();
 		switchTo().window(++SberTest.window);
-		Wait().withTimeout(Duration.ofSeconds(5));
+		LINK.waitWhile(Condition.exist, 10000, 2500);
 		assertURL();
 	}
 
@@ -84,6 +87,6 @@ public enum HeaderServiceLink implements Clickable, SelenideElementGetter, Xpath
 
 	@Override
 	public void assertURL() {
-		assertTrue(URL[this.ordinal()].contains(url()));
+		assertTrue(url().substring(0, URL[this.ordinal()].length()).contains(URL[this.ordinal()]));
 	}
 }

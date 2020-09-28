@@ -97,6 +97,6 @@ public enum NavTreeLink implements Clickable, SelenideElementGetter, XpathFormat
 
 	@Override
 	public void assertURL() {
-		assertTrue(URL[this.ordinal()].contains(url()));
+		assertTrue(url().substring(0, URL[this.ordinal()].length()).contains(URL[this.ordinal()]));
 	}
 }

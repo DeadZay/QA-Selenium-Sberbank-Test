@@ -82,6 +82,6 @@ public enum TabLink implements Clickable, SelenideElementGetter, XpathFormatGett
 
 	@Override
 	public void assertURL() {
-		assertTrue(URL[this.ordinal()].contains(url()));
+		assertTrue(url().substring(0, URL[this.ordinal()].length()).contains(URL[this.ordinal()]));
 	}
 }

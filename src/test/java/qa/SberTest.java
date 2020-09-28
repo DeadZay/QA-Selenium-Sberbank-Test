@@ -3,6 +3,7 @@ package qa;
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -24,7 +25,7 @@ import static ru.yandex.YandexRuPage.openYandexRuPage;
 import static ru.yandex.market.computers.notebooks.searchfilter.Manufacturer.*;
 
 /**
- * A class that realize functionality, needed by Sberbank HR, to give me offer
+ * A class that realize functionality, required by test task
  *
  * @author fcodi (dmitriy.maksimov@yahoo.com)
  */
@@ -106,8 +107,7 @@ public class SberTest {
 	}
 
 	/**
-	 * a function, with bruteforce realization of test from Sberbank HR
-	 *
+	 * a function, with bruteforce realization of test from task
 	 */
 	@Test
 	void explicitTest() {
@@ -135,12 +135,12 @@ public class SberTest {
 	}
 
 	/**
-	 * a function that realize test from Sberbank HR, using predefined page elements
+	 * a function that realize test from task, using predefined page elements
 	 * (like list, links, checkbox).
 	 * Looks like simple as explicitTest(), but contains in it a lot of logic
 	 */
 	@Test
-	void explicitExtendedTest() {
+	void halfImplicitTest() {
 		open("https://yandex.ru");
 		HeaderServiceLink.market.click();
 		switchTo().window(1);
@@ -160,7 +160,7 @@ public class SberTest {
 	}
 
 	/**
-	 * a function that realize test from Sberbank HR, using functionality of page objects
+	 * a function that realize test from task, using functionality of page objects
 	 * Page objects contains page elements and methods to work with it
 	 * Final realization of test
 	 */

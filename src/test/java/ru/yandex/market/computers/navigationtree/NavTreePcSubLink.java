@@ -31,6 +31,7 @@ public enum NavTreePcSubLink implements Clickable, XpathFormatGetter, XpathGette
 
 	private final String[] URL = {
 			"https://market.yandex.ru/catalog--planshety/",
+			"https://market.yandex.ru/catalog--noutbuki/",
 			"https://market.yandex.ru/catalog--nastolnye/",
 			"https://market.yandex.ru/catalog--monobloki/",
 			"https://market.yandex.ru/catalog--promyshlennye/",
@@ -67,7 +68,7 @@ public enum NavTreePcSubLink implements Clickable, XpathFormatGetter, XpathGette
 
 	@Override
 	public void assertURL() {
-		assertTrue(URL[this.ordinal()].contains(url()));
+		assertTrue(url().substring(0, URL[this.ordinal()].length()).contains(URL[this.ordinal()]));
 	}
 
 	@Override

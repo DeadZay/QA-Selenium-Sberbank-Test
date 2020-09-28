@@ -3,6 +3,8 @@ package ru.yandex;
 import io.qameta.allure.Step;
 import ru.yandex.market.YandexMarketPage;
 
+import java.net.URISyntaxException;
+
 import static com.codeborne.selenide.Selenide.open;
 import static ru.yandex.HeaderServiceLink.*;
 
