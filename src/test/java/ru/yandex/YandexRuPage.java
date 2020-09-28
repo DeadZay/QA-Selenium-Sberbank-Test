@@ -6,6 +6,9 @@ import ru.yandex.market.YandexMarketPage;
 import static com.codeborne.selenide.Selenide.open;
 import static ru.yandex.HeaderServiceLink.*;
 
+/**
+ * A class that realize control main page of Yandex (yandex.ru)
+ */
 public class YandexRuPage {
 
 	private static final String URL = "https://yandex.ru";

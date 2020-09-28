@@ -6,6 +6,9 @@ import qa.selenide.interfaces.Selectable;
 
 import static com.codeborne.selenide.Selenide.$;
 
+/**
+ * An Enum that realize control showing item count on page
+ */
 public enum ShowItemsOption implements Selectable{
 	showTwelve,
 	showFortyEight;

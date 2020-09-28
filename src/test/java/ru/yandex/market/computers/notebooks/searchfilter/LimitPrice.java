@@ -11,6 +11,9 @@ import qa.selenide.interfaces.XpathGetter;
 
 import static com.codeborne.selenide.Selenide.$;
 
+/**
+ * An Enum that realize control on two digit inputs, that contains minimum and maximum price of item
+ */
 public enum LimitPrice implements SelenideElementGetter, XpathGetter, XpathFormatGetter, TextInput {
 	min,
 	max;

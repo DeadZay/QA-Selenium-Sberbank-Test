@@ -1,20 +1,26 @@
 package ru.yandex.market.computers.notebooks;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.SelenideWait;
 import io.qameta.allure.Step;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
-import ru.yandex.market.computers.notebooks.headersearch.PageSearch;
 import ru.yandex.market.computers.notebooks.searchfilter.LimitPrice;
 import ru.yandex.market.computers.notebooks.searchfilter.Manufacturer;
 import ru.yandex.market.computers.notebooks.searchpager.ShowItemsOption;
 
-import java.io.IOException;
+import java.time.Duration;
 
 import static com.codeborne.selenide.Selenide.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class YandexMarketNotebooksPage {
+
+	private static final SelenideElement searchInput = $(By.id("header-search"));
+	private static final SelenideElement searchButton = $(By.xpath(
+			"//div[@data-apiary-widget-name = '@MarketNode/HeaderSearch']/form//button[@type = 'submit' and ./div = 'Найти']"));
 
 	private static final String URL = "https://market.yandex.ru/catalog--noutbuki/";
 
@@ -93,8 +99,12 @@ public class YandexMarketNotebooksPage {
 	}
 
 	@Step
-	public YandexMarketNotebooksPage search(@NotNull String request) {
-		PageSearch.request(request);
+	public YandexMarketNotebooksPage search(@NotNull String text) {
+		searchInput.shouldBe(Condition.visible).clear();
+		searchInput.sendKeys(text);
+		searchButton.click();
+		SelenideWait wait = new SelenideWait(searchButton.getWrappedDriver(), 5000, 2500);
+		wait.withTimeout(Duration.ofSeconds(5));
 		return this;
 	}
 

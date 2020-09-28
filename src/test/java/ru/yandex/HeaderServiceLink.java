@@ -2,7 +2,6 @@ package ru.yandex;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import qa.SberTest;
 import qa.selenide.interfaces.*;
@@ -13,6 +12,9 @@ import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.url;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * An Enum that realize control of header service link on main page of yandex (yandex.ru)
+ */
 public enum HeaderServiceLink implements Clickable, SelenideElementGetter, XpathGetter, XpathFormatGetter, AssertURL {
 	video,
 	images,

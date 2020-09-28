@@ -6,6 +6,9 @@ import ru.yandex.market.computers.YandexMarketComputersPage;
 import static com.codeborne.selenide.Selenide.*;
 import static ru.yandex.market.headerstab.TabLink.*;
 
+/**
+ * A class that contains methods to control web page
+ */
 public class YandexMarketPage {
 
 	private static final String URL = "market.yandex.ru";

@@ -10,6 +10,9 @@ import qa.selenide.interfaces.XpathGetter;
 
 import static com.codeborne.selenide.Selenide.$;
 
+/**
+ * An Enum that realize control on list with manufacturer checkboxex
+ */
 public enum Manufacturer implements XpathFormatGetter, XpathGetter, SelenideElementGetter, CheckboxInput {
 	Acer,
 	Alienware,

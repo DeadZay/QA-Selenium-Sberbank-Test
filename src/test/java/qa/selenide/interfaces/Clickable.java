@@ -1,8 +1,9 @@
 package qa.selenide.interfaces;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.SelenideElement;
-
+/**
+ * An interface Clickable is guarantees that object implements it
+ * contain method click()
+ */
 public interface Clickable {
 	void click();
 }

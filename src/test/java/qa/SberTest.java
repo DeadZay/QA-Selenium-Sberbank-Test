@@ -11,9 +11,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.openqa.selenium.By;
 import ru.yandex.HeaderServiceLink;
 import ru.yandex.market.computers.navigationtree.NavTreeLink;
-import ru.yandex.market.computers.navigationtree.NavTreeSubLink;
+import ru.yandex.market.computers.navigationtree.NavTreePcSubLink;
 import ru.yandex.market.computers.notebooks.YandexMarketNotebooksPage;
-import ru.yandex.market.computers.notebooks.headersearch.PageSearch;
 import ru.yandex.market.computers.notebooks.searchfilter.LimitPrice;
 import ru.yandex.market.computers.notebooks.searchpager.ShowItemsOption;
 import ru.yandex.market.headerstab.TabLink;
@@ -24,15 +23,28 @@ import static org.junit.jupiter.api.Assertions.*;
 import static ru.yandex.YandexRuPage.openYandexRuPage;
 import static ru.yandex.market.computers.notebooks.searchfilter.Manufacturer.*;
 
+/**
+ * A class that realize functionality, needed by Sberbank HR, to give me offer
+ *
+ * @author fcodi (dmitriy.maksimov@yahoo.com)
+ */
 public class SberTest {
 
 	public static int window = 0;
 
+	/**
+	 * beforeEach() set parameters before start every single test
+	 */
 	@BeforeEach
 	void beforeEach() {
 		Configuration.startMaximized = true;
 	}
 
+	/**
+	 * a function that test service links on page yandex.ru in header on the top of search field
+	 *
+	 * @param link - is a HeaderServiceLink that contain link to Yandex service;
+	 */
 	@ParameterizedTest
 	@EnumSource(HeaderServiceLink.class)
 	void clickOnHeaderServiceAndCheckUrl(HeaderServiceLink link) {
@@ -40,6 +52,10 @@ public class SberTest {
 		link.click();
 	}
 
+	/**
+	 * @param name - is a String representation (title of link) of service link
+	 *             on page yandex.ru in header on the top of search field
+	 */
 	@ParameterizedTest
 	@NullAndEmptySource
 	@ValueSource(strings = {"market", "Авто.ру", "tv", "Картинки"})
@@ -48,6 +64,12 @@ public class SberTest {
 		HeaderServiceLink.valueOf(name).click();
 	}
 
+	/**
+	 *
+	 * a function that test category links on header before market search field
+	 *
+	 * @param link - is link to category page of market.yandex.ru
+	 */
 	@ParameterizedTest
 	@EnumSource(TabLink.class)
 	private void clickTabLink(TabLink link) {
@@ -55,6 +77,12 @@ public class SberTest {
 		link.click();
 	}
 
+	/**
+	 *
+	 * a function that test category links in NavigationTree on the left side
+	 *
+	 * @param link - is link in @MarketNode/NavigationTree to category items
+	 */
 	@ParameterizedTest
 	@EnumSource(NavTreeLink.class)
 	void clickOnNavTreeLink(NavTreeLink link) {
@@ -62,13 +90,25 @@ public class SberTest {
 		link.click();
 	}
 
+	/**
+	 *
+	 * a function that test subcategory links in NavigationTree on the left side
+	 * inside selected category (current links - in PC category)
+	 *
+	 * @param link - is link in @MarketNode/NavigationTree to subcategory items
+	 *             inside category items.
+	 */
 	@ParameterizedTest
-	@EnumSource(NavTreeSubLink.class)
-	void clickOnNavTreeSubLink(NavTreeSubLink link) {
+	@EnumSource(NavTreePcSubLink.class)
+	void clickOnNavTreeSubLink(NavTreePcSubLink link) {
 		open("https://market.yandex.ru/catalog--kompiuternaia-tekhnika/54425");
 		link.click();
 	}
 
+	/**
+	 * a function, with bruteforce realization of test from Sberbank HR
+	 *
+	 */
 	@Test
 	void explicitTest() {
 		open("https://yandex.ru");
@@ -94,13 +134,18 @@ public class SberTest {
 				"First article not equal first article before search");
 	}
 
+	/**
+	 * a function that realize test from Sberbank HR, using predefined page elements
+	 * (like list, links, checkbox).
+	 * Looks like simple as explicitTest(), but contains in it a lot of logic
+	 */
 	@Test
 	void implicitElementsTest() {
 		open("https://yandex.ru");
 		HeaderServiceLink.market.click();
 		switchTo().window(1);
 		TabLink.computers.click();
-		NavTreeSubLink.notebook.click();
+		NavTreePcSubLink.notebook.click();
 		LimitPrice.min.setValue("10000");
 		LimitPrice.max.setValue("30000");
 		HP.set();
@@ -109,24 +154,33 @@ public class SberTest {
 		YandexMarketNotebooksPage notebooksPage = new YandexMarketNotebooksPage();
 		notebooksPage.checkItemsCount(12);
 		final String ITEM_NAME = notebooksPage.getItemNameByIndex(0);
-		PageSearch.request(ITEM_NAME);
+		notebooksPage.search(ITEM_NAME);
 		assertEquals(ITEM_NAME, notebooksPage.getItemNameByIndex(0),
 				"Item name not equal item name before search");
 	}
 
+	/**
+	 * a function that realize test from Sberbank HR, using functionality of page objects
+	 * Page objects contains page elements and methods to work with it
+	 * Final realization of test
+	 */
 	@Test
 	void implicitTest() {
 		YandexMarketNotebooksPage notebooksPage =
 				openYandexRuPage()
-				.clickOnMarketHeaderLink()
-				.clickOnComputersCatalogLink()
-				.clickOnNotebooksCatalogLink()
-				.setLimitOfPrice(10000, 30000)
-				.chooseManufacturer(HP, Lenovo)
-				.showTwelveItems()
-				.checkIndexItemDisplayedOnPositionAfterSearchIt(0,0);
+						.clickOnMarketHeaderLink()
+						.clickOnComputersCatalogLink()
+						.clickOnNotebooksCatalogLink()
+						.setLimitOfPrice(10000, 30000)
+						.chooseManufacturer(HP, Lenovo)
+						.showTwelveItems()
+						.checkIndexItemDisplayedOnPositionAfterSearchIt(0, 0);
 	}
 
+	/**
+	 * a function that running after every single test
+	 * Current - close browser (also webDriver)
+	 */
 	@AfterEach
 	void afterEach() {
 		closeWebDriver();

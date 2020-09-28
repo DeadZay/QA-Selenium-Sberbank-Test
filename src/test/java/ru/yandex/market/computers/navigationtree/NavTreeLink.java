@@ -2,7 +2,6 @@ package ru.yandex.market.computers.navigationtree;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import qa.selenide.interfaces.*;
 
@@ -10,6 +9,9 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.url;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * An Enum that realize @MarketNode/NavigationTree category link
+ */
 public enum NavTreeLink implements Clickable, SelenideElementGetter, XpathFormatGetter, XpathGetter, AssertURL {
 	laptopsAndDesktops,
 	components,
@@ -85,6 +87,7 @@ public enum NavTreeLink implements Clickable, SelenideElementGetter, XpathFormat
 				"SelenideElement check",
 				Condition.exist, Condition.enabled, Condition.visible))
 				.click();
+		assertURL();
 	}
 
 	@Override
