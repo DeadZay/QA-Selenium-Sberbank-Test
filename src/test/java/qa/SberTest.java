@@ -1,38 +1,77 @@
 package qa;
 
 import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.Wait;
 import ru.yandex.HeaderServiceLink;
+import ru.yandex.market.computers.navigationtree.NavTreeLink;
 import ru.yandex.market.computers.navigationtree.NavTreeSubLink;
 import ru.yandex.market.computers.notebooks.YandexMarketNotebooksPage;
 import ru.yandex.market.computers.notebooks.headersearch.PageSearch;
 import ru.yandex.market.computers.notebooks.searchfilter.LimitPrice;
-import ru.yandex.market.computers.notebooks.searchfilter.Manufacturer;
 import ru.yandex.market.computers.notebooks.searchpager.ShowItemsOption;
 import ru.yandex.market.headerstab.TabLink;
-
-import java.io.IOException;
-import java.time.Duration;
 
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.*;
+import static ru.yandex.YandexRuPage.openYandexRuPage;
+import static ru.yandex.market.computers.notebooks.searchfilter.Manufacturer.*;
 
 public class SberTest {
+
+	public static int window = 0;
 
 	@BeforeEach
 	void beforeEach() {
 		Configuration.startMaximized = true;
+	}
+
+	@ParameterizedTest
+	@EnumSource(HeaderServiceLink.class)
+	void clickOnHeaderServiceAndCheckUrl(HeaderServiceLink link) {
 		open("https://yandex.ru");
+		link.click();
+	}
+
+	@ParameterizedTest
+	@NullAndEmptySource
+	@ValueSource(strings = {"market", "Авто.ру", "tv", "Картинки"})
+	void getHeaderServiceLinkByNameAndClick(String name) {
+		open("https://yandex.ru");
+		HeaderServiceLink.valueOf(name).click();
+	}
+
+	@ParameterizedTest
+	@EnumSource(TabLink.class)
+	private void clickTabLink(TabLink link) {
+		open("https://market.yandex.ru");
+		link.click();
+	}
+
+	@ParameterizedTest
+	@EnumSource(NavTreeLink.class)
+	void clickOnNavTreeLink(NavTreeLink link) {
+		open("https://market.yandex.ru/catalog--kompiuternaia-tekhnika/54425");
+		link.click();
+	}
+
+	@ParameterizedTest
+	@EnumSource(NavTreeSubLink.class)
+	void clickOnNavTreeSubLink(NavTreeSubLink link) {
+		open("https://market.yandex.ru/catalog--kompiuternaia-tekhnika/54425");
+		link.click();
 	}
 
 	@Test
-	void skeletonTest() {
+	void explicitTest() {
+		open("https://yandex.ru");
 		$(By.xpath("//a[@data-id = 'market']")).click();
 		switchTo().window(1);
 		$(By.xpath("//div[@data-zone-name = 'category-link']//a[./span = 'Компьютеры']")).click();
@@ -56,21 +95,36 @@ public class SberTest {
 	}
 
 	@Test
-	void basicTest() throws IOException {
+	void implicitElementsTest() {
+		open("https://yandex.ru");
 		HeaderServiceLink.market.click();
 		switchTo().window(1);
 		TabLink.computers.click();
 		NavTreeSubLink.notebook.click();
 		LimitPrice.min.setValue("10000");
 		LimitPrice.max.setValue("30000");
-		Manufacturer.HP.set();
-		Manufacturer.Lenovo.set();
+		HP.set();
+		Lenovo.set();
 		ShowItemsOption.showTwelve.select();
-		YandexMarketNotebooksPage.checkItemsCount(12);
-		final String ITEM_NAME = YandexMarketNotebooksPage.getItemName(0);
+		YandexMarketNotebooksPage notebooksPage = new YandexMarketNotebooksPage();
+		notebooksPage.checkItemsCount(12);
+		final String ITEM_NAME = notebooksPage.getItemNameByIndex(0);
 		PageSearch.request(ITEM_NAME);
-		assertEquals(ITEM_NAME, YandexMarketNotebooksPage.getItemName(0),
+		assertEquals(ITEM_NAME, notebooksPage.getItemNameByIndex(0),
 				"Item name not equal item name before search");
+	}
+
+	@Test
+	void implicitTest() {
+		YandexMarketNotebooksPage notebooksPage =
+				openYandexRuPage()
+				.clickOnMarketHeaderLink()
+				.clickOnComputersCatalogLink()
+				.clickOnNotebooksCatalogLink()
+				.setLimitOfPrice(10000, 30000)
+				.chooseManufacturer(HP, Lenovo)
+				.showTwelveItems()
+				.checkIndexItemDisplayedOnPositionAfterSearchIt(0,0);
 	}
 
 	@AfterEach

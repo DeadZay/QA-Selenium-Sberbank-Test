@@ -6,7 +6,7 @@ import qa.selenide.interfaces.Selectable;
 
 import static com.codeborne.selenide.Selenide.$;
 
-public enum ShowItemsOption implements Selectable {
+public enum ShowItemsOption implements Selectable{
 	showTwelve,
 	showFortyEight;
 
@@ -14,6 +14,8 @@ public enum ShowItemsOption implements Selectable {
 			"Показывать по 12",
 			"Показывать по 48"
 	};
+
+	private final int[] COUNT = {12, 48};
 
 	private final String XPATH_FORMAT =
 			"//div[./button = 'Показать ещё']//div[//button[@aria-expanded]]//div[@aria-hidden = 'false']//button[.='%s']";
@@ -25,6 +27,10 @@ public enum ShowItemsOption implements Selectable {
 	@Override
 	public String toString() {
 		return TITLE[this.ordinal()];
+	}
+
+	public int getCount() {
+		return COUNT[this.ordinal()];
 	}
 
 	@Override

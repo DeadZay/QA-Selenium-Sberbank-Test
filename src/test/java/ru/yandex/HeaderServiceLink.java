@@ -4,9 +4,14 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
+import qa.SberTest;
 import qa.selenide.interfaces.*;
 
-import static com.codeborne.selenide.Selenide.$;
+import java.time.Duration;
+
+import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.WebDriverRunner.url;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public enum HeaderServiceLink implements Clickable, SelenideElementGetter, XpathGetter, XpathFormatGetter, AssertURL {
 	video,
@@ -58,6 +63,9 @@ public enum HeaderServiceLink implements Clickable, SelenideElementGetter, Xpath
 				"SelenideElement check",
 				Condition.exist, Condition.enabled, Condition.visible))
 				.click();
+		switchTo().window(++SberTest.window);
+		Wait().withTimeout(Duration.ofSeconds(5));
+		assertURL();
 	}
 
 	public String getXpathFormat() {
@@ -73,7 +81,7 @@ public enum HeaderServiceLink implements Clickable, SelenideElementGetter, Xpath
 	}
 
 	@Override
-	public boolean assertURL(@NotNull String url) {
-		return URL[this.ordinal()].contains(url);
+	public void assertURL() {
+		assertTrue(URL[this.ordinal()].contains(url()));
 	}
 }

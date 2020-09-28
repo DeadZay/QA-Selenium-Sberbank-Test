@@ -1,22 +1,22 @@
 package ru.yandex.market.computers;
 
-import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
-import ru.yandex.market.computers.navigationtree.NavTreeLink;
+import io.qameta.allure.Step;
+import ru.yandex.market.computers.notebooks.YandexMarketNotebooksPage;
 
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.WebDriverRunner.url;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static ru.yandex.market.computers.navigationtree.NavTreeSubLink.*;
 
 public class YandexMarketComputersPage {
+	final private static String URL = "https://market.yandex.ru/catalog--kompiuternaia-tekhnika/";
 
-	@ParameterizedTest
-	@EnumSource(NavTreeLink.class)
-	void clickOnNavTreeLink(NavTreeLink link) {
-		Configuration.startMaximized = true;
-		open("https://market.yandex.ru/catalog--kompiuternaia-tekhnika/54425");
-		link.click();
-		assertFalse(link.assertURL(url()), "Current url isn't contain current category url");
+	public static YandexMarketComputersPage openYandexMarketCatalogComputersPage() {
+		open(URL);
+		return new YandexMarketComputersPage();
+	}
+
+	@Step
+	public YandexMarketNotebooksPage clickOnNotebooksCatalogLink() {
+		notebook.click();
+		return new YandexMarketNotebooksPage();
 	}
 }

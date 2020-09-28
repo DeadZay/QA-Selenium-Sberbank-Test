@@ -1,7 +1,9 @@
 package qa.selenide.interfaces;
 
-import org.jetbrains.annotations.NotNull;
+import io.qameta.allure.Step;
 
 public interface AssertURL {
-	public boolean assertURL(@NotNull String url);
+
+	@Step
+	public void assertURL();
 }

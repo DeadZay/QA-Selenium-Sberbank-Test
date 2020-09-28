@@ -1,11 +1,14 @@
 package ru.yandex.market.headerstab;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import qa.selenide.interfaces.*;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.WebDriverRunner.url;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public enum TabLink implements Clickable, SelenideElementGetter, XpathFormatGetter, XpathGetter, AssertURL {
 	electronics,
@@ -64,7 +67,11 @@ public enum TabLink implements Clickable, SelenideElementGetter, XpathFormatGett
 
 	@Override
 	public void click() {
-		LINK.click();
+		LINK.shouldBe(Condition.and(
+				"SelenideElement check",
+				Condition.exist, Condition.enabled, Condition.visible))
+				.click();
+		assertURL();
 	}
 
 	public SelenideElement getSelenideElement() {
@@ -72,7 +79,7 @@ public enum TabLink implements Clickable, SelenideElementGetter, XpathFormatGett
 	}
 
 	@Override
-	public boolean assertURL(@NotNull String url) {
-		return URL[this.ordinal()].contains(url);
+	public void assertURL() {
+		assertTrue(URL[this.ordinal()].contains(url()));
 	}
 }

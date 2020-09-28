@@ -7,6 +7,8 @@ import org.openqa.selenium.By;
 import qa.selenide.interfaces.*;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.WebDriverRunner.url;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public enum NavTreeLink implements Clickable, SelenideElementGetter, XpathFormatGetter, XpathGetter, AssertURL {
 	laptopsAndDesktops,
@@ -91,7 +93,7 @@ public enum NavTreeLink implements Clickable, SelenideElementGetter, XpathFormat
 	}
 
 	@Override
-	public boolean assertURL(@NotNull String url) {
-		return URL[this.ordinal()].contains(url);
+	public void assertURL() {
+		assertTrue(URL[this.ordinal()].contains(url()));
 	}
 }
